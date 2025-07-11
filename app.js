@@ -56,13 +56,13 @@ let titleInterval;
 // ————————————————————————————————
 // POUR JEU DE 100 FR
 const slots = [
-  { sym: '🍒', gain:  200,  prob: 0.008    },
+  { sym: '🍒', gain:  200,  prob: 0.006    },
   { sym: '💎', gain:  300,  prob: 0.006    },
   { sym: '🔔', gain:    0,  prob: 0.7      },
-  { sym: '🍋', gain:  100,  prob: 0.006    },
+  { sym: '🍋', gain:  100,  prob: 0.00579  },
   { sym: '⭐', gain:  500,  prob: 0.002    },
   { sym: '💰', gain: 1000,  prob: 0.0002   },
-  { sym: '☘️', gain:    0,  prob: 0.27779  },
+  { sym: '☘️', gain:    0,  prob: 0.28     },
   { sym: '👑', gain: 2000,  prob: 0.00001  }
 ];
 
