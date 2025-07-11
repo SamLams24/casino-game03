@@ -56,15 +56,16 @@ let titleInterval;
 // ————————————————————————————————
 // POUR JEU DE 100 FR
 const slots = [
-  { sym: '🍒', gain:  200,  prob: 0.006    },
-  { sym: '💎', gain:  300,  prob: 0.006    },
+  { sym: '🍒', gain:  200,  prob: 0.00009  },
+  { sym: '💎', gain:  300,  prob: 0.00007  },
   { sym: '🔔', gain:    0,  prob: 0.7      },
-  { sym: '🍋', gain:  100,  prob: 0.00579  },
-  { sym: '⭐', gain:  500,  prob: 0.002    },
-  { sym: '💰', gain: 1000,  prob: 0.0002   },
-  { sym: '☘️', gain:    0,  prob: 0.28     },
-  { sym: '👑', gain: 2000,  prob: 0.00001  }
+  { sym: '🍋', gain:  100,  prob: 0.000114 },
+  { sym: '⭐', gain:  500,  prob: 0.00002  },
+  { sym: '💰', gain: 1000,  prob: 0.000005 },
+  { sym: '☘️', gain:    0,  prob: 0.2997   },
+  { sym: '👑', gain: 2000,  prob: 0.000001 }
 ];
+
 
 // POUR JEU DE 500FR
 // const slots = [
