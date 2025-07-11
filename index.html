@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Roue Casino</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'>
+  <circle cx='32' cy='32' r='30' fill='%23FFD700' stroke='%23000' stroke-width='4'/>
+  <circle cx='32' cy='32' r='25' fill='%23000'/>
+  <text x='32' y='38' font-size='26' text-anchor='middle' fill='%23FFD700' font-family='Verdana'>🎰</text>
+  <animateTransform attributeName='transform' attributeType='XML' type='rotate' from='0 32 32' to='360 32 32' dur='2s' repeatCount='indefinite'/>
+</svg>">
+
+</head>
+<body>
+
+    <!-- By Lams from Codeurs Pro -->
+<h1>🎰 Codeurs Pro Casino</h1>
+<h2>Tchaley Viens jouer et gagne de l'argent flex</h2>
+
+<div class="roulette">
+  <div class="insign" style="--i:0">🍒</div>
+  <div class="insign" style="--i:1">💎</div>
+  <div class="insign" style="--i:2">🔔</div>
+  <div class="insign" style="--i:3">🍋</div>
+  <div class="insign" style="--i:4">⭐</div>
+  <div class="insign" style="--i:5">💰</div>
+  <div class="insign" style="--i:6">☘️</div>
+  <div class="insign" style="--i:7">👑</div>
+  <div class="pointer"></div>
+</div>
+
+<button id="spin">🎲 Tourner</button>
+
+<h2 id="resultat"></h2>
+<h3>Balance : <span id="balance">0 FCFA</span></h3>
+
+<h3>📊 Stats</h3>
+<p>Parties jouées : <span id="gamesPlayed">0</span></p>
+<p>Total gains : <span id="totalGains">0 FCFA</span></p>
+<p>RTP actuel : <span id="rtp">0 %</span></p>
+
+<audio id="tickSound" src="sounds/spin4.wav" volume="1"></audio>
+<audio id="winSound" src="sounds/win2.wav" volume="0.9"></audio>
+<audio id="ambiance" src="sounds/casino_ambiance.mp3" autoplay loop volume="0.6"></audio>
+
+<script src="app.js"></script>
+</body>
+</html>
