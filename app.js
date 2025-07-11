@@ -28,10 +28,9 @@ MersenneTwister.prototype.generateNumbers = function() {
 };
 
 // ————————————————————————————————
-// 2) Init du jeu & "échauffement" du PRNG
+// 2) Init jeu & warm‑up du PRNG
 // ————————————————————————————————
 const rng = new MersenneTwister(Date.now());
-// Warm‑up pour décaler la séquence initiale
 for (let i = 0; i < 200; i++) rng.extractNumber();
 
 const spinBtn   = document.getElementById("spin");
@@ -51,35 +50,26 @@ const defaultTitle = document.title;
 let titleInterval;
 
 // ————————————————————————————————
-// 3) Table des symboles & probabilités
-//    (gains moyens plus fréquents, gros gains rares)
+// 3) Slots & probas mode démoniaque
 // ————————————————————————————————
-// POUR JEU DE 100 FR
 const slots = [
-  { sym: '🍒', gain:  200,  prob: 0.000007  },  // 7 sur 1M
-  { sym: '💎', gain:  300,  prob: 0.000005  },  // 5 sur 1M
-  { sym: '🔔', gain:    0,  prob: 0.7        },  // 70%
-  { sym: '🍋', gain:  100,  prob: 0.00001   },  // 10 sur 1M
-  { sym: '⭐', gain:  500,  prob: 0.000001  },  // 1 sur 1M
-  { sym: '💰', gain: 1000,  prob: 0.0000005 },  // 0.5 sur 1M
-  { sym: '☘️', gain:    0,  prob: 0.2999764 },  // 29.99764%
-  { sym: '👑', gain: 2000,  prob: 0.0000001 }   // 0.1 sur 1M
+  { sym: '🍒', gain:  200,  prob: 0.000004  },
+  { sym: '💎', gain:  300,  prob: 0.000002  },
+  { sym: '🔔', gain:    0,  prob: 0.7        },
+  { sym: '🍋', gain:  100,  prob: 0.000006  },
+  { sym: '⭐', gain:  500,  prob: 0.0000005 },
+  { sym: '💰', gain: 1000,  prob: 0.0000001 },
+  { sym: '☘️', gain:    0,  prob: 0.29998935 },
+  { sym: '👑', gain: 2000,  prob: 0.00000005 }
 ];
 
+// Vérifie la somme des probas
+const totalProb = slots.reduce((acc, s) => acc + s.prob, 0);
+console.log("Total probabilité =", totalProb.toFixed(10));
 
-// POUR JEU DE 500FR
-// const slots = [
-//   { sym: '🍒', gain:  200, prob: 0.20 },   // 20%
-//   { sym: '💎', gain:  300, prob: 0.15 },   // 15%
-//   { sym: '🔔', gain:    0, prob: 0.20 },   // 20%
-//   { sym: '🍋', gain:  100, prob: 0.20 },   // 20%
-//   { sym: '⭐', gain:  500, prob: 0.10 },   // 10%
-//   { sym: '💰',gain: 1000, prob: 0.03 },   //  3%
-//   { sym: '☘️',gain:    0, prob: 0.10 },   // 10%
-//   { sym: '👑',gain: 2000, prob: 0.02 }    //  2%
-// ];
-
-// Tirage pondéré (stable, pas de shuffle)
+// ————————————————————————————————
+// 4) Tirage pondéré sécurisé
+// ————————————————————————————————
 function pick(rng) {
   const r = rng.extractNumber();
   let sum = 0;
@@ -87,11 +77,12 @@ function pick(rng) {
     sum += s.prob;
     if (r <= sum) return s;
   }
-  return slots[slots.length - 1];
+  // Si aucun gagnant → symbole perdant par défaut
+  return slots.find(s => s.gain === 0);
 }
 
 // ————————————————————————————————
-// 4) Mise à jour de l’affichage du pointeur
+// 5) Pointeur
 // ————————————————————————————————
 function updatePointer() {
   insigns.forEach((el, i) => {
@@ -100,15 +91,13 @@ function updatePointer() {
 }
 
 // ————————————————————————————————
-// 5) Stats & RTP
+// 6) Stats & RTP
 // ————————————————————————————————
-let totalGames = 0;
-let totalGains = 0;
-let totalMises = 0;
+let totalGames = 0, totalGains = 0, totalMises = 0;
 
 function updateStats(gain) {
   totalGames++;
-  totalMises += 500;       // coût fixe par tour
+  totalMises += 500;
   totalGains += gain;
   const rtp = (totalGains / totalMises) * 100;
   document.getElementById("gamesPlayed").textContent = totalGames;
@@ -116,7 +105,9 @@ function updateStats(gain) {
   document.getElementById("rtp").textContent         = rtp.toFixed(2) + " %";
 }
 
-// Animation du titre en cas de gain
+// ————————————————————————————————
+// 7) Animation titre
+// ————————————————————————————————
 function animateTitle(message) {
   clearInterval(titleInterval);
   let visible = true;
@@ -132,20 +123,17 @@ function animateTitle(message) {
 }
 
 // ————————————————————————————————
-// 6) Lancement du spin (une seule fois)
+// 8) Lancer un spin
 // ————————————————————————————————
 spinBtn.addEventListener("click", () => {
-  // UX : désactive le bouton pendant l’animation
   spinBtn.disabled = true;
   resultat.textContent = "";
 
-  // 1) On détermine d’abord le symbole gagnant
   const sel = pick(rng);
   const symbols = Array.from(insigns).map(el => el.textContent.trim());
   const targetIndex = symbols.indexOf(sel.sym);
 
-  // 2) Calcul du nombre de pas (tours complets + offset)
-  const fullRounds    = Math.floor(rng.extractNumber() * 4) + 4; // 4 à 7 tours
+  const fullRounds    = Math.floor(rng.extractNumber() * 4) + 4;
   const stepsToTarget = (targetIndex - current + totalInsigns) % totalInsigns;
   const cycles        = fullRounds * totalInsigns + stepsToTarget;
 
@@ -153,19 +141,14 @@ spinBtn.addEventListener("click", () => {
   clearInterval(interval);
 
   interval = setInterval(() => {
-    // effet sonore "tic"
     tickSound.currentTime = 0;
     tickSound.play().catch(() => {});
-
-    // on avance first, puis on éclaire
     current = (current + 1) % totalInsigns;
     updatePointer();
-
     count++;
+
     if (count >= cycles) {
       clearInterval(interval);
-
-      // Affichage du résultat
       balance += sel.gain;
       updateStats(sel.gain);
 
@@ -178,15 +161,13 @@ spinBtn.addEventListener("click", () => {
         resultat.textContent = `❌ Rien... (${sel.sym})`;
       }
       balanceEl.textContent = `${balance.toLocaleString()} FCFA`;
-
-      // réactive le bouton
       spinBtn.disabled = false;
     }
   }, speed);
 });
 
 // ————————————————————————————————
-// 7) Fond lumineux animé
+// 9) Animation fond lumineux
 // ————————————————————————————————
 for (let i = 0; i < 60; i++) {
   const dot = document.createElement('div');
